@@ -120,6 +120,14 @@ function crearSubBarrios() {
 // Procesar cada entrada del JSON
 crearProvincias();
 
+// Reasigna valor y elimina id
+municipios.forEach(x => { x.code = x.id;  delete x.id});
+distritoMunicipales.forEach(x => { x.code = x.id;  delete x.id});
+sectores.forEach(x => { x.code = x.id;  delete x.id});
+barrios.forEach(x => { x.code = x.id;  delete x.id});
+subbarrios.forEach(x => { x.code = x.id;  delete x.id});
+
+
 let structuredData = {
     provinces: provincias,
     municipalities: municipios,
