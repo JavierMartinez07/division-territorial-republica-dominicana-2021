@@ -24,23 +24,28 @@ function crearProvincias() {
 }
 
 function crearMunicipio() {
+    let index = 1;
     for (const provincia of provincias) {
         const municipio = locations.filter(x => x.Provincia == provincia.code && x.Municipio > 0 && x.DistritoMunicipal == 0 && x.Seccion == 0 && x.Barrio == 0 && x.SubBarrio == 0);
         municipio.forEach(x => {
-            municipios.push({ code: x.Municipio, name: x.Nombre, provinceId: provincia.code})
+            municipios.push({ id: index, code: x.Municipio, name: x.Nombre, provinceId: provincia.code});
+            index++;
         });
+
     }
 
     crearDistritoMunicipal()
 }
 
 function crearDistritoMunicipal() {
+    let index = 1;
     for (const provincia of provincias) {
         const municipiosData = municipios.filter(x => x.provinceId == provincia.code);
         for (const municipio of municipiosData) {
             const dm = locations.filter(x => x.Provincia == provincia.code && x.Municipio == municipio.code && x.DistritoMunicipal > 0 && x.Seccion == 0 && x.Barrio == 0 && x.SubBarrio == 0);
             dm.forEach(x => {
-                distritoMunicipales.push({ code: x.DistritoMunicipal, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.code })
+                distritoMunicipales.push({ id: index, code: x.DistritoMunicipal, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.code });
+                index++;
             });
         }
     }
@@ -49,6 +54,7 @@ function crearDistritoMunicipal() {
 }
 
 function crearSeccion() {
+    let index = 1;
     for (const provincia of provincias) {
         const municipiosData = municipios.filter(x => x.provinceId == provincia.code);
         for (const municipio of municipiosData) {
@@ -56,7 +62,8 @@ function crearSeccion() {
             for (const dm of DmData) {
                 const sector = locations.filter(x => x.Provincia == provincia.code && x.Municipio == municipio.code && x.DistritoMunicipal == dm.code && x.Seccion > 0 && x.Barrio == 0 && x.SubBarrio == 0);
             sector.forEach(x => {
-                sectores.push({ code: x.Seccion, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.code, districtId: dm.code })
+                sectores.push({ id: index, code: x.Seccion, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.code, districtId: dm.code });
+                index++;
             });
             }
         }
@@ -65,6 +72,7 @@ function crearSeccion() {
 }
 
 function crearBarrios() {
+    let index = 1;
     for (const provincia of provincias) {
         const municipiosData = municipios.filter(x => x.provinceId == provincia.code);
         for (const municipio of municipiosData) {
@@ -74,7 +82,8 @@ function crearBarrios() {
                 for (const sector of sectoresData) {
                     const barrio = locations.filter(x => x.Provincia == provincia.code && x.Municipio == municipio.code && x.DistritoMunicipal == dm.code && x.Seccion == sector.code && x.Barrio > 0 && x.SubBarrio == 0);
                     barrio.forEach(x => {
-                        barrios.push({ code: x.Barrio, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.code, districtId: dm.code, sectorId: sector.code })
+                        barrios.push({ id: index, code: x.Barrio, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.code, districtId: dm.code, sectorId: sector.code });
+                        index++;
                     });
                 }
             }
@@ -84,6 +93,7 @@ function crearBarrios() {
 }
 
 function crearSubBarrios() {
+    let index = 1;
     for (const provincia of provincias) {
         const municipiosData = municipios.filter(x => x.provinceId == provincia.code);
         for (const municipio of municipiosData) {
@@ -95,7 +105,8 @@ function crearSubBarrios() {
                     for (const barrio of barriosData) {
                         const subbarrio = locations.filter(x => x.Provincia == provincia.code && x.Municipio == municipio.code && x.DistritoMunicipal == dm.code && x.Seccion == sector.code && x.Barrio == barrio.code && x.SubBarrio > 0);
                         subbarrio.forEach(x => {
-                            subbarrios.push({ code: x.SubBarrio, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.code, districtId: dm.code, sectorId: sector.code, neighborhoodId: barrio.code });
+                            subbarrios.push({ id: index,  code: x.SubBarrio, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.code, districtId: dm.code, sectorId: sector.code, neighborhoodId: barrio.code });
+                            index++;
                         });
                     }
 
@@ -119,6 +130,6 @@ let structuredData = {
 };
 
 // Guardar el resultado en un nuevo archivo JSON
-fs.writeFileSync('division-territorial-2021.json', JSON.stringify(structuredData, null, 2));
+fs.writeFileSync('division-territorial-2021-2.json', JSON.stringify(structuredData, null, 2));
 
 console.log('Estructura jerárquica creada y guardada en division-territorial-2021.json');
