@@ -121,11 +121,11 @@ function crearSubBarrios() {
 crearProvincias();
 
 // Reasigna valor y elimina id
-municipios.forEach(x => { delete x.id });
-distritoMunicipales.forEach(x => { delete x.id });
-sectores.forEach(x => { delete x.id });
-barrios.forEach(x => { delete x.id });
-subbarrios.forEach(x => { delete x.id });
+municipios.forEach(x => { x.code = x.id; delete x.id });
+distritoMunicipales.forEach(x => {  x.code = x.id; delete x.id });
+sectores.forEach(x => {  x.code = x.id; delete x.id });
+barrios.forEach(x => {  x.code = x.id; delete x.id });
+subbarrios.forEach(x => {  x.code = x.id; delete x.id });
 
 
 let structuredData = {
