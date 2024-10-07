@@ -44,7 +44,7 @@ function crearDistritoMunicipal() {
         for (const municipio of municipiosData) {
             const dm = locations.filter(x => x.Provincia == provincia.code && x.Municipio == municipio.code && x.DistritoMunicipal > 0 && x.Seccion == 0 && x.Barrio == 0 && x.SubBarrio == 0);
             dm.forEach(x => {
-                distritoMunicipales.push({ id: index, code: x.DistritoMunicipal, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.code });
+                distritoMunicipales.push({ id: index, code: x.DistritoMunicipal, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.id });
                 index++;
             });
         }
@@ -58,11 +58,11 @@ function crearSeccion() {
     for (const provincia of provincias) {
         const municipiosData = municipios.filter(x => x.provinceId == provincia.code);
         for (const municipio of municipiosData) {
-            const DmData = distritoMunicipales.filter(x => x.provinceId == provincia.code && x.municipalityId == municipio.code);
+            const DmData = distritoMunicipales.filter(x => x.provinceId == provincia.code && x.municipalityId == municipio.id);
             for (const dm of DmData) {
                 const sector = locations.filter(x => x.Provincia == provincia.code && x.Municipio == municipio.code && x.DistritoMunicipal == dm.code && x.Seccion > 0 && x.Barrio == 0 && x.SubBarrio == 0);
             sector.forEach(x => {
-                sectores.push({ id: index, code: x.Seccion, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.code, districtId: dm.code });
+                sectores.push({ id: index, code: x.Seccion, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.id, districtId: dm.id });
                 index++;
             });
             }
@@ -76,13 +76,13 @@ function crearBarrios() {
     for (const provincia of provincias) {
         const municipiosData = municipios.filter(x => x.provinceId == provincia.code);
         for (const municipio of municipiosData) {
-            const DmData = distritoMunicipales.filter(x => x.provinceId == provincia.code && x.municipalityId == municipio.code);
+            const DmData = distritoMunicipales.filter(x => x.provinceId == provincia.code && x.municipalityId == municipio.id);
             for (const dm of DmData) {
-                const sectoresData = sectores.filter(x => x.provinceId == provincia.code && x.municipalityId == municipio.code && x.districtId == dm.code);
+                const sectoresData = sectores.filter(x => x.provinceId == provincia.code && x.municipalityId == municipio.id && x.districtId == dm.id);
                 for (const sector of sectoresData) {
                     const barrio = locations.filter(x => x.Provincia == provincia.code && x.Municipio == municipio.code && x.DistritoMunicipal == dm.code && x.Seccion == sector.code && x.Barrio > 0 && x.SubBarrio == 0);
                     barrio.forEach(x => {
-                        barrios.push({ id: index, code: x.Barrio, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.code, districtId: dm.code, sectorId: sector.code });
+                        barrios.push({ id: index, code: x.Barrio, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.id, districtId: dm.id, sectorId: sector.id });
                         index++;
                     });
                 }
@@ -97,15 +97,15 @@ function crearSubBarrios() {
     for (const provincia of provincias) {
         const municipiosData = municipios.filter(x => x.provinceId == provincia.code);
         for (const municipio of municipiosData) {
-            const DmData = distritoMunicipales.filter(x => x.provinceId == provincia.code && x.municipalityId == municipio.code);
+            const DmData = distritoMunicipales.filter(x => x.provinceId == provincia.code && x.municipalityId == municipio.id);
             for (const dm of DmData) {
-                const sectoresData = sectores.filter(x => x.provinceId == provincia.code && x.municipalityId == municipio.code && x.districtId == dm.code);
+                const sectoresData = sectores.filter(x => x.provinceId == provincia.code && x.municipalityId == municipio.id && x.districtId == dm.id);
                 for (const sector of sectoresData) {
-                    const barriosData = barrios.filter(x => x.provinceId == provincia.code && x.municipalityId == municipio.code && x.districtId == dm.code && x.sectorId == sector.code);
+                    const barriosData = barrios.filter(x => x.provinceId == provincia.code && x.municipalityId == municipio.id && x.districtId == dm.id && x.sectorId == sector.id);
                     for (const barrio of barriosData) {
                         const subbarrio = locations.filter(x => x.Provincia == provincia.code && x.Municipio == municipio.code && x.DistritoMunicipal == dm.code && x.Seccion == sector.code && x.Barrio == barrio.code && x.SubBarrio > 0);
                         subbarrio.forEach(x => {
-                            subbarrios.push({ id: index,  code: x.SubBarrio, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.code, districtId: dm.code, sectorId: sector.code, neighborhoodId: barrio.code });
+                            subbarrios.push({ id: index,  code: x.SubBarrio, name: x.Nombre, provinceId: provincia.code, municipalityId: municipio.id, districtId: dm.id, sectorId: sector.id, neighborhoodId: barrio.id });
                             index++;
                         });
                     }
@@ -121,11 +121,11 @@ function crearSubBarrios() {
 crearProvincias();
 
 // Reasigna valor y elimina id
-municipios.forEach(x => { x.code = x.id;  delete x.id});
-distritoMunicipales.forEach(x => { x.code = x.id;  delete x.id});
-sectores.forEach(x => { x.code = x.id;  delete x.id});
-barrios.forEach(x => { x.code = x.id;  delete x.id});
-subbarrios.forEach(x => { x.code = x.id;  delete x.id});
+municipios.forEach(x => { delete x.id });
+distritoMunicipales.forEach(x => { delete x.id });
+sectores.forEach(x => { delete x.id });
+barrios.forEach(x => { delete x.id });
+subbarrios.forEach(x => { delete x.id });
 
 
 let structuredData = {
